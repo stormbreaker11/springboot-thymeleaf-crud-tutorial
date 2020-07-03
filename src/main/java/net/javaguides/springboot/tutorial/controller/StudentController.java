@@ -3,18 +3,19 @@ package net.javaguides.springboot.tutorial.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import net.javaguides.springboot.tutorial.entity.Student;
 import net.javaguides.springboot.tutorial.repository.StudentRepository;
 
-@Controller
+@RestController
 @RequestMapping("/students/")
 public class StudentController {
 
@@ -26,24 +27,27 @@ public class StudentController {
 	}
 
 	@GetMapping("signup")
-	public String showSignUpForm(Student student) {
-		return "add-student";
+	public ModelAndView showSignUpForm(Student student) {
+		return new ModelAndView("add-student");
 	}
 
 	@GetMapping("list")
-	public String showUpdateForm(Model model) {
+	public ModelAndView showUpdateForm(Model model) {
+		ModelAndView andView = new ModelAndView("index");
+		
 		model.addAttribute("students", studentRepository.findAll());
-		return "index";
+		return andView;
 	}
 
 	@PostMapping("add")
-	public String addStudent(@Valid Student student, BindingResult result, Model model) {
+	public ModelAndView addStudent(@Valid Student student, BindingResult result, Model model) {
 		if (result.hasErrors()) {
-			return "add-student";
+			return new ModelAndView("add-student");
 		}
-
+		ModelAndView andView = new ModelAndView("index");
+		model.addAttribute("students", studentRepository.findAll());
 		studentRepository.save(student);
-		return "redirect:list";
+		return andView;
 	}
 
 	@GetMapping("edit/{id}")

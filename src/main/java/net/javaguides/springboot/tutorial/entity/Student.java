@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Length;
 
 @Entity
 public class Student {
@@ -24,6 +27,7 @@ public class Student {
     private String email;
 
     @Column(name = "phone_no")
+   
     private long phoneNo;
     
     public Student() {}
